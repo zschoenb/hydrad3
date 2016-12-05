@@ -6,8 +6,8 @@
   <script src="d3sparql.js"></script>
   <script>
   function exec() {
-    /* Uncomment to see debug information in console */
-    d3sparql.debug = true
+    /* Uncomment to see debug information in console 
+    d3sparql.debug = true*/
     var endpoint = d3.select("#endpoint").property("value")
     var sparql = d3.select("#sparql").property("value")
     d3sparql.query(endpoint, sparql, render)
@@ -28,12 +28,7 @@
   <form style="display:none">
    <input id="endpoint" value="http://sheff.library.ualberta.ca:3030/data/query" type="text">
    <textarea id="sparql">
-	  prefix xsd: <http://www.w3.org/2001/XMLSchema#>
-    SELECT ?key1 ?key2
-    WHERE {
-	  ?key1 <http://terms.library.library.ca/identifiers/hasCollection> ?key2
-    }
-	   LIMIT 100
+   SELECT ?key1 ?key2 WHERE {?key1 <http://terms.library.library.ca/identifiers/hasCollection> ?key2 }LIMIT 100
    </textarea>
   </form>
   <div id="result"></div>
