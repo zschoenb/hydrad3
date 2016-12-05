@@ -4,34 +4,45 @@
  <head>
   <script src="http://d3js.org/d3.v3.min.js"></script>
   <script src="d3sparql.js"></script>
+  <script src="timeseries.js"></script> 
   <script>
   function exec() {
-    /* Uncomment to see debug information in console 
-    d3sparql.debug = true*/
     var endpoint = d3.select("#endpoint").property("value")
     var sparql = d3.select("#sparql").property("value")
+    var domEl = 'timeseries';
+    var brushEnabled = false;
     d3sparql.query(endpoint, sparql, render)
   }
-  function render(json) {
+  
+    function render(json) {
     /* set options and call the d3spraql.xxxxx function in this library ... */
     var config = {
-      "selector": "#result"
+      "width":    1000,      // canvas width (optional)
+      "height":   900,       // canvas height (optional)
+      "margin":   50,        // canvas margin (optional)
+      "selector": "#timeseries"
     }
-    d3sparql.forcegraph(json, config)
+    d3sparql.timeseriez(json, config)
+    data = d3sparql.timeseriez.data
+    timeseries(domEl, data, brushEnabled);
   }
-  </script>
-  <style>
-  <!-- customize CSS -->
-  </style>
+ </script>
  </head>
  <body onload="exec()">
   <!-- <form style="display:none"> -->
    <input id="endpoint" value="http://sheff.library.ualberta.ca:3030/data/query" type="text">
    <textarea id="sparql">
-   SELECT DISTINCT ?key1 ?key2 ?key3 WHERE  {  ?x <http://fedora.info/definitions/v4/repository#lastModified> ?date .
-  		?x <http://fedora.info/definitions/v4/repository#uuid> ?uuid } LIMIT 100
+   PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+select ?resource ?date
+where {
+   ?resource rdf:type <http://fedora.info/definitions/v4/repository#Resource> .
+   ?resource <http://fedora.info/definitions/v4/repository#lastModified> ?date .
+   FILTER (?date < "2016-11-05T00:00:00"^^xsd:dateTime)
+   FILTER (?date > "2016-09-01T00:00:00"^^xsd:dateTime)
+  } order by desc(?date) limit 100
    </textarea>
   </form>
-  <div id="result"></div>
+  <div class="timeseries"></div>
  </body>
 </html>
