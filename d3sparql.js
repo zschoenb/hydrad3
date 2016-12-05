@@ -74,6 +74,52 @@ d3sparql.query = function(endpoint, sparql, callback) {
 */
 }
 
+/* custom js for timeseries */
+
+  d3sparql.timeseriez = function(json, config) {
+  config = config || {}
+
+  var head = json.head.vars
+  var data = json.results.bindings
+
+  var opts = {
+    "value":   config.date   || head[0] || "value",
+    "id":   config.uuid   || head[1] || "id",
+    "label1": config.label1 || head[2] || false,
+    "label2": config.label2 || head[3] || false,
+    "value1": config.value1 || head[4] || false,
+    "value2": config.value2 || head[5] || false,
+  }
+  var graph = {
+    "nodes": [],
+    "links": []
+  }
+  var check = d3.map()
+  var index = 0
+  for (var i = 0; i < data.length; i++) {
+    var value = data[i][opts.value].value
+    var id = data[i][opts.id].value
+    var label1 = opts.label1 ? data[i][opts.label1].value : value
+    var label2 = opts.label2 ? data[i][opts.label2].value : id
+    var value1 = opts.value1 ? data[i][opts.value1].value : false
+    var value2 = opts.value2 ? data[i][opts.value2].value : false
+    if (!check.has(value)) {
+      graph.nodes.push({"key": value, "label": label1, "value": value1})
+      check.set(value, index)
+      index++
+    }
+    if (!check.has(id)) {
+      graph.nodes.push({"id": id, "label": label2, "value": value2})
+      check.set(id, index)
+      index++
+    }
+    graph.links.push({"source": check.get(value), "target": check.get(id)})
+  }
+  if (d3sparql.debug) { console.log(JSON.stringify(graph)) }
+  return timeseriez
+}
+
+
 /*
   Convert sparql-results+json object into a JSON graph in the {"nodes": [], "links": []} form.
   Suitable for d3.layout.force(), d3.layout.sankey() etc.
@@ -99,7 +145,7 @@ d3sparql.query = function(endpoint, sparql, callback) {
 
   TODO:
     Should follow the convention in the miserables.json https://gist.github.com/mbostock/4062045 to contain group for nodes and value for edges.
-*/
+
 d3sparql.graph = function(json, config) {
   config = config || {}
 
@@ -107,8 +153,8 @@ d3sparql.graph = function(json, config) {
   var data = json.results.bindings
 
   var opts = {
-    "key1":   config.key1   || head[0] || "key1",
-    "key2":   config.key2   || head[1] || "key2",
+    "date":   config.date   || head[0] || "date",
+    "uuid":   config.uuid   || head[1] || "uuid",
     "label1": config.label1 || head[2] || false,
     "label2": config.label2 || head[3] || false,
     "value1": config.value1 || head[4] || false,
@@ -121,23 +167,23 @@ d3sparql.graph = function(json, config) {
   var check = d3.map()
   var index = 0
   for (var i = 0; i < data.length; i++) {
-    var key1 = data[i][opts.key1].value
-    var key2 = data[i][opts.key2].value
-    var label1 = opts.label1 ? data[i][opts.label1].value : key1
-    var label2 = opts.label2 ? data[i][opts.label2].value : key2
+    var date = data[i][opts.date].value
+    var uuid = data[i][opts.uuid].value
+    var label1 = opts.label1 ? data[i][opts.label1].value : date
+    var label2 = opts.label2 ? data[i][opts.label2].value : uuid
     var value1 = opts.value1 ? data[i][opts.value1].value : false
     var value2 = opts.value2 ? data[i][opts.value2].value : false
     if (!check.has(key1)) {
-      graph.nodes.push({"key": key1, "label": label1, "value": value1})
+      graph.nodes.push({"key": date, "label": label1, "value": value1})
       check.set(key1, index)
       index++
     }
     if (!check.has(key2)) {
-      graph.nodes.push({"key": key2, "label": label2, "value": value2})
+      graph.nodes.push({"key": uuid, "label": label2, "value": value2})
       check.set(key2, index)
       index++
     }
-    graph.links.push({"source": check.get(key1), "target": check.get(key2)})
+    graph.links.push({"source": check.get(date), "target": check.get(uuid)})
   }
   if (d3sparql.debug) { console.log(JSON.stringify(graph)) }
   return graph
