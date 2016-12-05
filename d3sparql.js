@@ -2038,13 +2038,7 @@ d3sparql.frameheight = function(height) {
 /* for Node.js */
 //module.exports = d3sparql
 
-        WHERE { ... }
-       </textarea>
-      </form>
-      <div id="result"></div>
-     </body>
-    </html>
-*/
+  
 d3sparql.query = function(endpoint, sparql, callback) {
   var url = endpoint + "?query=" + encodeURIComponent(sparql)
   if (d3sparql.debug) { console.log(endpoint) }
