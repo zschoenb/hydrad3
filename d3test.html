@@ -28,8 +28,8 @@
   <!-- <form style="display:none"> -->
    <input id="endpoint" value="http://sheff.library.ualberta.ca:3030/data/query" type="text">
    <textarea id="sparql">
-   SELECT DISTINCT ?key1 ?key2 ?label1 WHERE  {  ?key1 <http://fedora.info/definitions/v4/repository#lastModified> ?key2 .
-  		?key1 <http://fedora.info/definitions/v4/repository#uuid> ?label1 } LIMIT 100
+   SELECT DISTINCT ?key1 ?key2 ?key3 WHERE  {  ?x <http://fedora.info/definitions/v4/repository#lastModified> ?date .
+  		?x <http://fedora.info/definitions/v4/repository#uuid> ?uuid } LIMIT 100
    </textarea>
   </form>
   <div id="result"></div>
