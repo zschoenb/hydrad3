@@ -28,16 +28,20 @@
   <form style="display:none">
    <input id="endpoint" value="http://dbpedia.org/sparql" type="text">
    <textarea id="sparql">
- PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-PREFIX dcterm: <http://purl.org/dc/terms/>
-select ?resource ?date ?title
-where {
-   ?resource rdf:type <http://fedora.info/definitions/v4/repository#Resource> .
-   ?resource <http://fedora.info/definitions/v4/repository#lastModified> ?date .
-   FILTER (?date < "2016-11-05T00:00:00"^^xsd:dateTime)
-   FILTER (?date > "2016-09-01T00:00:00"^^xsd:dateTime)
-   ?resource dcterm:title ?title
+    PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+SELECT ?child ?child_name ?root_name ?parentID1 ?parent_name1 ?parent_name2
+WHERE {
+VALUES ?root_name {'ERA'}
+?child <http://fedora.info/definitions/v4/repository#hasParent> <http://gillingham.library.ualberta.ca:8080/fedora/rest/prod> .
+?child <http://terms.library.ualberta.ca/identifiers/is_community> "true"^^xsd:boolean .
+?child <http://purl.org/dc/terms/title> ?child_name .
+?child <info:fedora/fedora-system:def/relations-external#hasCollectionMember> ?parentID1 .
+?parent1 <http://terms.library.ualberta.ca/identifiers/hasCollectionId> ?parentID1 .
+?parent1 <http://purl.org/dc/terms/title> ?parent_name1 .
+?parent2 <http://terms.library.ualberta.ca/identifiers/hasCollectionId> ?parentID1 .
+?parent2 <http://purl.org/dc/terms/title> ?parent_name2
+
+}
    </textarea>
   </form>
   <div id="result"></div>
