@@ -29,10 +29,9 @@
    <input id="endpoint" value="http://sheff.library.ualberta.ca:3030/data/query" type="text">
    <textarea id="sparql">
 	  prefix xsd: <http://www.w3.org/2001/XMLSchema#>
-    SELECT ?c
+    SELECT ?key1 ?key2
     WHERE {
-	  ?a <http://terms.library.library.ca/identifiers/hasCollection> "Reviews"^^xsd:string .
-    ?a ?b ?c
+	  ?key1 <http://terms.library.library.ca/identifiers/hasCollection> ?key2
     }
    </textarea>
   </form>
