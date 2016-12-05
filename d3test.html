@@ -1,37 +1,33 @@
-<!DOCTYPE html>
-<meta charset="utf-8">
-<html>
- <head>
-  <script src="http://d3js.org/d3.v3.min.js"></script>
-  <script src="d3sparql.js"></script>
-  <script src="timeseries.js"></script> 
-  <script>
-  function exec() {
-    var endpoint = d3.select("#endpoint").property("value")
-    var sparql = d3.select("#sparql").property("value")
-    var domEl = 'timeseries';
-    var brushEnabled = false;
-    d3sparql.query(endpoint, sparql, render)
-  }
-  
-    function render(json) {
-    /* set options and call the d3spraql.xxxxx function in this library ... */
-    var config = {
-      "width":    1000,      // canvas width (optional)
-      "height":   900,       // canvas height (optional)
-      "margin":   50,        // canvas margin (optional)
-      "selector": "#timeseries"
-    }
-    d3sparql.timeseriez(json, config)
-    data = d3sparql.timeseriez.data
-    timeseries(domEl, data, brushEnabled);
-  }
- </script>
- </head>
- <body onload="exec()">
-  <!-- <form style="display:none"> -->
-   <input id="endpoint" value="http://sheff.library.ualberta.ca:3030/data/query" type="text">
-   <textarea id="sparql">
+    <!DOCTYPE html>
+    <meta charset="utf-8">
+    <html>
+     <head>
+      <script src="http://d3js.org/d3.v3.min.js"></script>
+      <script src="d3sparql.js"></script>
+      <script>
+       function exec() {
+         var endpoint = d3.select("#endpoint").property("value")
+         var sparql = d3.select("#sparql").property("value")
+         d3sparql.query(endpoint, sparql, render)
+       }
+       function render(json) {
+         // set options and call the d3sparql.xxxxx visualization methods in this library ...
+         var config = {
+          "margin": {"top": 10, "right": 10, "bottom": 10, "left": 10},
+          "selector": "#timeseries",
+          ...
+         }
+         d3sparql.timeseriez(json, config)
+       }
+      </script>
+      <style>
+      <!-- customize CSS -->
+      </style>
+     </head>
+     <body onload="exec()">
+      <form style="display:none">
+       <input id="endpoint" value="http://dbpedia.org/sparql" type="text">
+       <textarea id="sparql">
    PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 select ?resource ?date
@@ -41,8 +37,8 @@ where {
    FILTER (?date < "2016-11-05T00:00:00"^^xsd:dateTime)
    FILTER (?date > "2016-09-01T00:00:00"^^xsd:dateTime)
   } order by desc(?date) limit 100
-   </textarea>
-  </form>
-  <div class="timeseries"></div>
- </body>
-</html>
+       </textarea>
+      </form>
+      <div id="timeseries"></div>
+     </body>
+    </html>
