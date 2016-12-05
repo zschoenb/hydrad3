@@ -7,21 +7,34 @@
   <script>
   function exec() {
     /* Uncomment to see debug information in console */
-    // d3sparql.debug = true
+    d3sparql.debug = true
     var endpoint = d3.select("#endpoint").property("value")
     var sparql = d3.select("#sparql").property("value")
     d3sparql.query(endpoint, sparql, render)
   }
   function render(json) {
     /* set options and call the d3spraql.xxxxx function in this library ... */
-    var config = {
+    config = {
+      "width":    1000,      // canvas width (optional)
+      "height":   900,       // canvas height (optional)
+      "margin":   150,       // margin for labels (optional)
       "selector": "#result"
+      // options for d3sparql.tree() can be added here ...
     }
     d3sparql.sunburst(json, config)
   }
   </script>
   <style>
-  <!-- customize CSS -->
+      <style>
+    .node text {
+      font-size: 10px;
+      font-family: sans-serif;
+    }
+    .arc {
+      stroke: #ffffff;
+      fill-rule: evenodd;
+    }
+    </style>
   </style>
  </head>
  <body onload="exec()">
