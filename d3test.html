@@ -29,9 +29,8 @@
    <input id="endpoint" value="http://dbpedia.org/sparql" type="text">
    <textarea id="sparql">
     PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-SELECT ?child ?child_name ?root_name ?parentID1 ?parent_name1 ?parent_name2
-WHERE {
-VALUES ?root_name {'ERA'}
+SELECT ?root_name ?child_name ?parent_name1 ?parent_name2
+WHERE { VALUES ?root_name {'ERA'}
 ?child <http://fedora.info/definitions/v4/repository#hasParent> <http://gillingham.library.ualberta.ca:8080/fedora/rest/prod> .
 ?child <http://terms.library.ualberta.ca/identifiers/is_community> "true"^^xsd:boolean .
 ?child <http://purl.org/dc/terms/title> ?child_name .
@@ -40,7 +39,6 @@ VALUES ?root_name {'ERA'}
 ?parent1 <http://purl.org/dc/terms/title> ?parent_name1 .
 ?parent2 <http://terms.library.ualberta.ca/identifiers/hasCollectionId> ?parentID1 .
 ?parent2 <http://purl.org/dc/terms/title> ?parent_name2
-
 }
    </textarea>
   </form>
