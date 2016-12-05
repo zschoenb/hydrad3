@@ -28,14 +28,16 @@
       <form style="display:none">
        <input id="endpoint" value="http://dbpedia.org/sparql" type="text">
        <textarea id="sparql">
-   PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-select ?resource ?date
+PREFIX dcterm: <http://purl.org/dc/terms/>
+select ?resource ?date ?title
 where {
    ?resource rdf:type <http://fedora.info/definitions/v4/repository#Resource> .
    ?resource <http://fedora.info/definitions/v4/repository#lastModified> ?date .
    FILTER (?date < "2016-11-05T00:00:00"^^xsd:dateTime)
    FILTER (?date > "2016-09-01T00:00:00"^^xsd:dateTime)
+   ?resource dcterm:title ?title
   } order by desc(?date) limit 100
        </textarea>
       </form>
